@@ -1,0 +1,55 @@
+Rama main
+% Las Reglas
+gripe(X):- malestar(X), fiebre(X), tos(X),sec_nas(X).
+dengue(X):- malestar(X), fiebre(X), dolor_art_mus(X), rash(X).
+
+% El diagnóstico 
+diagnostico(X):-nl, write('Se investiga GRIPE'),gripe(X),
+             nl, write(X), write(' tiene sintomas de GRIPE.'),fail.
+diagnostico(X):-nl, write('Se investiga DENGUE'), dengue(X),
+             nl, write(X),write(' tiene sospecha de DENGUE.').
+
+diagnostico(X):-write(' NO SE LOGRO UN DIAGNOSTICO.').
+
+% Consulta principal
+diagnostico(Paciente).
+
+Rama feature1
+% Funciones auxiliares para el diagnóstico
+preguntar_sintoma(Pregunta) :-
+    repeat,
+        write(Pregunta),
+        read(Respuesta),
+    !.
+
+validar_respuesta(R) :-
+    (   R == s ; R == n ),
+    !.
+
+% Ejemplo de uso
+preguntar_sintoma('¿Tiene malestar?', Malestar),
+valid(Malestar).
+
+% Nueva función para el diagnóstico
+nuevo_diagnóstico(Paciente) :-
+    diagnostico(Paciente),
+    write('¿Desea continuar con el diagnóstico? (s/n): '),
+    read(Continuar),
+    validar_respuesta(Continuar),
+    (   Continuar == s ->
+        diagnostico(Paciente)
+    ;
+        true
+    ).
+Rama feature2
+% Reglas adicionales para diagnóstico
+otra_condición(X) :- /* Aquí irían las nuevas condiciones */
+
+nuevo_diagnóstico_adicional(X) :-
+    diagnostico(X),
+    otra_condición(X),
+    write('Se ha encontrado una condición adicional.'),
+    !.
+
+% Ejemplo de uso
+nuevo_diagnóstico_adicional(Paciente).
